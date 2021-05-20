@@ -14,31 +14,33 @@ nFrames = signal.getnframes()
 raw = signal.readframes(-1)
 raw = np.frombuffer(raw, "int16")
 
-# Define Sampling Frequency
-fs = signal.getframerate()
-
 # Define and set x-axis
-dt = np.linspace(0, len(raw) / fs, num=len(raw))
+dt = np.linspace(0, len(raw) / sampleRate, num=len(raw))
 
 #  Plot Time Domain Signal
 plt.figure(1)
 plt.title("Time Domain Plot")
 plt.plot(dt, raw, color="blue")
 plt.xlabel("Time")
-plt.show()
-
 
 # Compute the fft
 y = np.fft.fft(raw)
-freq = np.fft.fftfreq(dt.shape[-1])
-
+freq = np.fft.fftfreq(dt.shape[-1], 1/sampleRate)
 
 # Plot FFT Frequency Domain 
 plt.figure(2)
-plt.title("Time Domain Plot")
-plt.plot(freq*(fs/len(raw)), abs(y))
+plt.title("Frequency Response of Signal")
+plt.plot(freq, abs(y))
 plt.xlabel("Frequency")
+plt.ylabel('Magnitude')
 plt.show()
+
+
+
+
+
+
+
 
 
 
