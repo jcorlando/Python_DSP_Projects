@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 from scipy import signal as sig
 from scipy.signal import lfilter, butter, kaiserord, firwin, freqz
 
+# Use website below for documentaion of creating FIR Filters
+# https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.remez.html
+
 #------Open Noisy Signal file and set Parameters equal to variables------
 signal = wave.open('imperial_march_noisy.wav', 'rb')
 sampleRate = signal.getframerate()
