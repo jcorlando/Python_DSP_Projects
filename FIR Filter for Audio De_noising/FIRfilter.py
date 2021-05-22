@@ -30,7 +30,7 @@ dt = np.linspace(0, len(raw) / sampleRate, num=len(raw))
 
 #---------------Plot Time Domain of Original Signal---------------
 # plt.figure()
-# plt.title("Time Domain Plot")
+# plt.title("Time Domain Plot (Original Signal)")
 # plt.plot(dt, raw, color="blue")
 # plt.xlabel("Time")
 #---------------Plot Time Domain of Original Signal---------------
@@ -42,7 +42,7 @@ freq = np.fft.fftfreq(dt.shape[-1], 1/sampleRate)
 
 #--------------Plot FFT Frequency Response of Original Signal---------------
 # plt.figure()
-# plt.title("Frequency Response of Signal")
+# plt.title("Frequency Response of Orignal Signal")
 # plt.plot(freq, abs(y))
 # plt.xlim(-270, 5700)
 # plt.ylim(-4.1E7, 1.949E9)
@@ -70,15 +70,61 @@ w, h1 = signal.freqz(taps_1, [1], worN=2000)
 # plt.grid(True)
 # plt.xlabel('Frequency (Hz)')
 # plt.ylabel('Gain (dB)')
-# plt.title("Band-stop Filter")
+# plt.title("1st Band-stop Filter")
 #----------------Plot Frequency Response of 1st filter----------------
 
 
-#--------------Apply First Filter to the Original Signal------------------
+#---------------------------Create 2nd Band Stop Filter------------------------------
+band = [3500, 5322] # Desired stop band, Hz
+trans_width = 100   # Width of transition from pass band to stop band, Hz
+numtaps = 501       # Size of the FIR filter.
+edges = [0, band[0] - trans_width, band[0], band[1], band[1] + trans_width, 0.5*sampleRate]
+taps_2 = signal.remez(numtaps, edges, [1, 0, 1], Hz=sampleRate)
+w, h2 = signal.freqz(taps_2, [1], worN=2000)
+#---------------------------Create 2nd Band Stop Filter------------------------------
+
+
+#----------------Plot Frequency Response of 2nd filter----------------
+# plt.figure()
+# plt.plot(0.5*sampleRate*w/np.pi, 20*np.log10(np.abs(h2)))
+# plt.ylim(-71, 11)
+# plt.xlim(1200, 8600)
+# plt.grid(True)
+# plt.xlabel('Frequency (Hz)')
+# plt.ylabel('Gain (dB)')
+# plt.title("2nd Band-stop Filter")
+#----------------Plot Frequency Response of 2nd filter----------------
+
+
+#---------------------------Create 3rd Band Stop Filter------------------------------
+band = [70, 76]     # Desired stop band, Hz
+trans_width = 7    # Width of transition from pass band to stop band, Hz
+numtaps = 10001     # Size of the FIR filter.
+edges = [0, band[0] - trans_width, band[0], band[1], band[1] + trans_width, 0.5*sampleRate]
+taps_3 = signal.remez(numtaps, edges, [1, 0, 1], Hz=sampleRate)
+w, h3 = signal.freqz(taps_3, [1], worN=2000)
+#---------------------------Create 3rd Band Stop Filter------------------------------
+
+
+#----------------Plot Frequency Response of 3rd filter----------------
+# plt.figure()
+# plt.plot(0.5*sampleRate*w/np.pi, 20*np.log10(np.abs(h3)))
+# plt.ylim(-22, 4)
+# plt.xlim(-24, 575)
+# plt.grid(True)
+# plt.xlabel('Frequency (Hz)')
+# plt.ylabel('Gain (dB)')
+# plt.title("3rd Band-stop Filter")
+#----------------Plot Frequency Response of 3rd filter----------------
+
+
+#--------------Apply Filters to Signal------------------
 raw_filtered = np.convolve(taps_1, raw, 'same')
+raw_filtered = np.convolve(taps_2, raw_filtered, 'same')
+raw_filtered = np.convolve(taps_3, raw_filtered, 'same')
 # Or use below (lfilter), both work equally the same
 # raw_filtered = lfilter(taps_1, [1], raw)
-#--------------Apply First Filter to the Original Signal------------------
+#--------------Apply Filters to Signal------------------
 
 
 #------------------Compute the fft of Filtered Signal------------------
@@ -99,7 +145,7 @@ freq = np.fft.fftfreq(dt.shape[-1], 1/sampleRate)
 
 #---------------Plot Time Domain of Filtered Signal---------------
 # plt.figure()
-# plt.title("Time Domain Plot Filtered Signal")
+# plt.title("Time Domain Plot (Filtered Signal)")
 # plt.plot(dt, raw_filtered, color="blue")
 # plt.xlabel("Time")
 #---------------Plot Time Domain of Filtered Signal---------------
