@@ -17,7 +17,6 @@ sampleRate = x.getframerate()
 sampWidth = x.getsampwidth()
 nChannels = x.getnchannels()
 nFrames = x.getnframes()
-
 #------Open Noisy Signal file and set Parameters equal to variables------
 
 #-----------Extract Raw Data from wav file--------------
@@ -30,10 +29,10 @@ dt = np.linspace(0, len(raw) / sampleRate, num=len(raw))
 #------------------Define and set x-axis------------------------
 
 #---------------Plot Time Domain of Original Signal---------------
-# plt.figure()
-# plt.title("Time Domain Plot")
-# plt.plot(dt, raw, color="blue")
-# plt.xlabel("Time")
+plt.figure()
+plt.title("Time Domain Plot")
+plt.plot(dt, raw, color="blue")
+plt.xlabel("Time")
 #---------------Plot Time Domain of Original Signal---------------
 
 #------------------Compute the fft------------------
@@ -81,10 +80,10 @@ raw_filtered = raw_filtered.astype('int16')
 #--------------Apply First Filter to the Original Signal------------------
 
 
-#------------------Compute the fft------------------
+#------------------Compute the fft of Filtered Signal------------------
 y = np.fft.fft(raw_filtered)
 freq = np.fft.fftfreq(dt.shape[-1], 1/sampleRate)
-#------------------Compute the fft------------------
+#------------------Compute the fft of Filtered Signal------------------
 
 #--------------Plot FFT Frequency Response of Filtered Signal---------------
 # plt.figure()
@@ -98,10 +97,10 @@ freq = np.fft.fftfreq(dt.shape[-1], 1/sampleRate)
 
 
 #---------------Plot Time Domain of Filtered Signal---------------
-# plt.figure()
-# plt.title("Time Domain Plot Filtered Signal")
-# plt.plot(dt, raw_filtered, color="blue")
-# plt.xlabel("Time")
+plt.figure()
+plt.title("Time Domain Plot Filtered Signal")
+plt.plot(dt, raw_filtered, color="blue")
+plt.xlabel("Time")
 #---------------Plot Time Domain of Filtered Signal---------------
 
 #-------Show all Plots and Figures-------
